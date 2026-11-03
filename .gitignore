@@ -1,0 +1,44 @@
+
+# Research datasets
+/Data/
+/Data_small/
+
+# Patient-level analysis and inventory files
+/results/
+
+# Private research documents and outputs
+/docs/papers/
+/docs/reports/FREESURFER_QC_FINDINGS.md
+
+# Archived scripts
+/src/data/archive/
+
+# Medical imaging and generated arrays
+*.dcm
+*.nii
+*.nii.gz
+*.hdr
+*.img
+*.npy
+
+# Python temporary files
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+~$*
+
+# Temporary organization scripts
+/fix_paths.py
+/organize_project.py
+/inspect_documents.py
