@@ -9,7 +9,7 @@ Outputs in Data_small/tables/:
 Label (Project RQ: "progression"), evaluated at a horizon H (default 36 months) after the visit:
     progress = 1 if the diagnosis gets WORSE within H  (ADNI: CN->MCI/AD, MCI->AD ; OASIS-2: CDR increases)
     conv     = 1 if the subject REACHES dementia within H (ADNI: AD ; OASIS-2: CDR >= 1)
-    0 only if follow-up is long enough to be sure (>= H - 90 days), else NaN (= censored, dropped in training).
+    0 only if follow-up covers the full horizon (>= H), else NaN (= censored, dropped in training).
     Subjects already at the last stage (AD / CDR 2) are NaN (cannot progress).
 
 Usage:  python build_tables.py [--data "...\\Data_small"] [--horizon-months 36]
@@ -23,13 +23,13 @@ ap = argparse.ArgumentParser()
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 ap.add_argument("--data", default=PROJECT_ROOT / "Data_small", type=Path)
 ap.add_argument("--horizon-months", type=float, default=36)
-ap.add_argument("--censor-slack-days", type=int, default=90)
+ap.add_argument("--censor-slack-days", type=int, default=0)
 a = ap.parse_args()
 
 D = Path(a.data)
 T = D / "ADNI_Tables"
 OUT = D / "tables_assessment"; OUT.mkdir(exist_ok=True)
-H = pd.Timedelta(days=a.horizon_months * 30.44)
+H = pd.Timedelta(days=a.horizon_months * 30.4375)
 SLACK = pd.Timedelta(days=a.censor_slack_days)
 report = []
 
@@ -71,12 +71,12 @@ def attach(assessments, tbl, datecol, cols, rename, tol_days, tag):
     t = t.sort_values("_date")
 
     left = assessments.copy()
-    left = left.sort_values("assessment_date")
+    left = left.sort_values("scan_date")
 
     result = pd.merge_asof(
         left,
         t.drop(columns=datecol),
-        left_on="assessment_date",
+        left_on="scan_date",
         right_on="_date",
         by="PTID",
         tolerance=pd.Timedelta(days=tol_days),
@@ -84,11 +84,11 @@ def attach(assessments, tbl, datecol, cols, rename, tol_days, tag):
     )
 
     result[f"{tag}_gap_days"] = (
-        result["assessment_date"] - result["_date"]
+        result["scan_date"] - result["_date"]
     ).dt.days
 
     return result.drop(columns="_date").sort_values(
-        ["PTID", "assessment_date"]
+        ["PTID", "scan_date"]
     ).reset_index(drop=True)
 
 

@@ -41,7 +41,7 @@ ap.add_argument("--use-dx", action="store_true", help="ADNI: also give the curre
 ap.add_argument("--no-cdr", action="store_true", help="drop CDR features (OASIS-2 label is built from CDR)")
 a = ap.parse_args()
 
-T = Path(a.data) / "tables"
+T = Path(a.data) / "tables_assessment"
 df = pd.read_csv(T / f"{a.cohort}_visits.csv")
 G = json.load(open(T / f"feature_groups_{a.cohort}.json"))
 if a.use_dx and a.cohort == "adni":
