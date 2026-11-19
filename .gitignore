@@ -42,3 +42,13 @@ Thumbs.db
 /fix_paths.py
 /organize_project.py
 /inspect_documents.py
+
+# Allow OASIS-2 pipeline source code, but keep its data and outputs private
+!/Data/
+/Data/*
+!/Data/oasis2_pipeline/
+/Data/oasis2_pipeline/*
+!/Data/oasis2_pipeline/*.py
+!/Data/oasis2_pipeline/README.md
+!/Data/oasis2_pipeline/requirements.txt
+!/Data/oasis2_pipeline/.gitignore

@@ -1,0 +1,9 @@
+data/
+data_synthetic/
+outputs/
+__pycache__/
+*.npy
+*.img
+*.hdr
+*.nii
+*.nii.gz
